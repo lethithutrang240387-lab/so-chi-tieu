@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sổ Chi Tiêu Không Giới Hạn (23/11/2026 - 06/12/2026)</title>
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --surface: #141821;
+      --surface-2: #1b2130;
+      --border: #2a3347;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --ok: #22c55e;
+      --warn: #ef4444;
+      --gold: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.45;
+    }
+    .app { max-width: 1020px; margin: 0 auto; }
+    .top-bar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+      align-items: flex-start; margin-bottom: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px;
+    }
+    h1 { margin: 0; font-size: 19px; font-weight: 700; }
+    .sub-row {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      margin-top: 6px; font-size: 12.5px; color: var(--muted);
+    }
+    .save-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(34, 197, 94, 0.12); color: #86efac;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    button, label.btn {
+      background: var(--surface-2); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 12px; border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px; transition: 0.15s;
+    }
+    button:hover, label.btn:hover { border-color: var(--accent); background: #222a3d; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    button.primary:hover { background: var(--accent-hover); }
+    button.danger:hover { border-color: var(--warn); color: #fca5a5; }
+    input[type="file"] { display: none; }
+
+    .config-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px; margin-bottom: 12px;
+    }
+    .config-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px;
+    }
+    .config-card label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .config-card input {
+      width: 100%; padding: 8px 10px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text);
+      font-size: 14px; font-weight: 600;
+    }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px; margin-bottom: 16px;
+    }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px;
+    }
+    .stat .label { font-size: 12px; color: var(--muted); }
+    .stat .val { font-size: 17px; font-weight: 700; margin-top: 6px; }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .gold { color: var(--gold); }
+
+    .week-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px; margin-bottom: 14px;
+    }
+    .week-header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px;
+    }
+    .week-title { font-weight: 700; font-size: 15px; }
+    .week-range { color: var(--muted); font-size: 12px; margin-left: 6px; }
+    .week-summary { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12.5px; }
+
+    .day-card {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 10px; margin-bottom: 8px; overflow: hidden;
+    }
+    .day-card:last-child { margin-bottom: 0; }
+    .day-head {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px; padding: 11px 12px; cursor: pointer; user-select: none;
+    }
+    .day-head:hover { background: #222a3c; }
+    .day-left { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; }
+    .day-note-preview { color: var(--muted); font-size: 12px; }
+    .day-right { font-size: 12.5px; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .day-body {
+      display: none; padding: 12px; border-top: 1px solid var(--border);
+      background: #10141c;
+    }
+    .day-card.open .day-body { display: block; }
+    .inputs-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 10px;
+    }
+    .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .field input {
+      width: 100%; padding: 8px 10px; border-radius: 7px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px;
+    }
+    .field input:focus, .note-field input:focus, .config-card input:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .note-field { margin-top: 10px; }
+    .note-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .note-field input {
+      width: 100%; padding: 8px 10px; border-radius: 7px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px;
+    }
+    .hint {
+      font-size: 12px; color: var(--muted); margin-top: 12px;
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: 10px; padding: 10px 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top-bar">
+      <div>
+        <h1>Sổ Chi Tiêu Không Giới Hạn</h1>
+        <div class="sub-row">
+          <span>Giai đoạn: 23/11/2026 – 06/12/2026</span>
+          <span class="save-badge" id="saveStatus">Đã tự động lưu vào trình duyệt</span>
+        </div>
+      </div>
+      <div class="actions">
+        <label class="btn" for="importJsonInput">Import JSON</label>
+        <input type="file" id="importJsonInput" accept=".json,application/json" />
+        <button class="primary" id="exportJsonBtn">Export JSON (Sao lưu)</button>
+        <button class="danger" id="resetBtn">Reset gốc</button>
+      </div>
+    </div>
+
+    <div class="config-bar">
+      <div class="config-card">
+        <label for="initialBalanceInput">Số tiền ban đầu (đ)</label>
+        <input type="number" id="initialBalanceInput" min="0" step="1000" />
+      </div>
+      <div class="config-card">
+        <label for="weeklyLimitInput">Hạn mức mỗi tuần (đ)</label>
+        <input type="number" id="weeklyLimitInput" min="0" step="1000" />
+      </div>
+    </div>
+
+    <div class="stats-grid" id="statsGrid"></div>
+    <div id="weeksList"></div>
+
+    <div class="hint">
+      <strong>Mẹo giữ dữ liệu không mất toàn bộ:</strong> Mọi thay đổi đều tự lưu vào bộ nhớ trình duyệt (<code>localStorage</code>) của thiết bị hiện tại. Ngoài ra, hãy bấm <strong>Export JSON</strong> định kỳ để tải file dự phòng về máy/Drive — nếu lỡ xóa cache hoặc mở trên máy khác, chỉ cần bấm <strong>Import JSON</strong> để nạp lại đầy đủ.
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "so_chi_tieu_23_11_2026_v1";
+
+    const DEFAULT_DATA = {
+      app: "so_chi_tieu_23_11_2026",
+      exportedAt: "2026-11-22T05:07:51.000Z",
+      state: {
+        visibleDays: 14,
+        initialBalance: 20000,
+        weeklyLimit: 300000,
+        days: {
+          "2026-11-23": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-24": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-25": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-26": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-27": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-28": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-29": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-11-30": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-12-01": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-12-02": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-12-03": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-12-04": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-12-05": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" },
+          "2026-12-06": { parentIncome: 0, breakfast: 0, afternoon: 0, drinks: 0, football: 0, travel: 0, extraCost: 0, note: "" }
+        },
+        dayExpandedMap: {},
+        weekCollapsedMap: {}
+      }
+    };
+
+    const FIELD_LABELS = {
+      parentIncome: "Tiền bố mẹ cho (+)",
+      breakfast: "Ăn sáng",
+      afternoon: "Ăn trưa / chiều",
+      drinks: "Đồ uống",
+      football: "Đá bóng",
+      travel: "Đi lại",
+      extraCost: "Chi phí khác"
+    };
+
+    const EXPENSE_FIELDS = ["breakfast", "afternoon", "drinks", "football", "travel", "extraCost"];
+    const WEEKDAY_NAMES = ["Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+
+    function normalizeData(raw) {
+      const base = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      if (!raw || typeof raw !== "object") return base;
+      const srcState = raw.state && typeof raw.state === "object" ? raw.state : raw;
+
+      base.app = raw.app || base.app;
+      base.exportedAt = raw.exportedAt || base.exportedAt;
+      base.state.initialBalance = Number(srcState.initialBalance ?? base.state.initialBalance) || 0;
+      base.state.weeklyLimit = Number(srcState.weeklyLimit ?? base.state.weeklyLimit) || 0;
+      base.state.dayExpandedMap = (srcState.dayExpandedMap && typeof srcState.dayExpandedMap === "object") ? srcState.dayExpandedMap : {};
+      base.state.weekCollapsedMap = (srcState.weekCollapsedMap && typeof srcState.weekCollapsedMap === "object") ? srcState.weekCollapsedMap : {};
+
+      if (srcState.days && typeof srcState.days === "object") {
+        Object.keys(base.state.days).forEach(dateKey => {
+          const incoming = srcState.days[dateKey];
+          if (incoming && typeof incoming === "object") {
+            base.state.days[dateKey] = {
+              parentIncome: Number(incoming.parentIncome || 0),
+              breakfast: Number(incoming.breakfast || 0),
+              afternoon: Number(incoming.afternoon || 0),
+              drinks: Number(incoming.drinks || 0),
+              football: Number(incoming.football || 0),
+              travel: Number(incoming.travel || 0),
+              extraCost: Number(incoming.extraCost || 0),
+              note: String(incoming.note ?? "")
+            };
+          }
+        });
+      }
+      return base;
+    }
+
+    function loadSaved() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return normalizeData(DEFAULT_DATA);
+        return normalizeData(JSON.parse(raw));
+      } catch {
+        return normalizeData(DEFAULT_DATA);
+      }
+    }
+
+    let appData = loadSaved();
+
+    function persist(reasonText) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        const now = new Date().toLocaleTimeString("vi-VN", { hour12: false });
+        document.getElementById("saveStatus").textContent = `${reasonText || "Đã tự động lưu"} lúc ${now}`;
+      } catch (e) {
+        document.getElementById("saveStatus").textContent = "Không lưu được vào trình duyệt";
+      }
+    }
+
+    function fmtMoney(n) {
+      return Number(n || 0).toLocaleString("vi-VN") + "đ";
+    }
+
+    function formatDateLabel(isoDate) {
+      const [y, m, d] = isoDate.split("-").map(Number);
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      const wd = WEEKDAY_NAMES[dt.getUTCDay()];
+      const dd = String(d).padStart(2, "0");
+      const mm = String(m).padStart(2, "0");
+      return `${wd} - ${dd}/${mm}/${y}`;
+    }
+
+    function calcDayExpense(dayObj) {
+      return EXPENSE_FIELDS.reduce((sum, key) => sum + Number(dayObj[key] || 0), 0);
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    function render() {
+      const { initialBalance, weeklyLimit, days, dayExpandedMap } = appData.state;
+      document.getElementById("initialBalanceInput").value = initialBalance;
+      document.getElementById("weeklyLimitInput").value = weeklyLimit;
+
+      const sortedDates = Object.keys(days).sort();
+      let totalIncome = 0;
+      let totalExpense = 0;
+      sortedDates.forEach(d => {
+        totalIncome += Number(days[d].parentIncome || 0);
+        totalExpense += calcDayExpense(days[d]);
+      });
+
+      const currentBalance = Number(initialBalance || 0) + totalIncome - totalExpense;
+      const totalLimit14Days = Number(weeklyLimit || 0) * 2;
+      const remainingLimit = totalLimit14Days - totalExpense;
+
+      document.getElementById("statsGrid").innerHTML = `
+        <div class="stat">
+          <div class="label">Số dư hiện tại</div>
+          <div class="val ${currentBalance < 0 ? "warn" : "ok"}">${fmtMoney(currentBalance)}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Tổng tiền bố mẹ cho</div>
+          <div class="val ok">+${fmtMoney(totalIncome)}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Tổng đã chi (14 ngày)</div>
+          <div class="val warn">${fmtMoney(totalExpense)}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Còn lại theo hạn mức 2 tuần</div>
+          <div class="val ${remainingLimit < 0 ? "warn" : "gold"}">${fmtMoney(remainingLimit)}</div>
+        </div>
+      `;
+
+      const weeks = [
+        { title: "TUẦN 1", range: "23/11/2026 – 29/11/2026", dates: sortedDates.slice(0, 7) },
+        { title: "TUẦN 2", range: "30/11/2026 – 06/12/2026", dates: sortedDates.slice(7, 14) }
+      ];
+
+      document.getElementById("weeksList").innerHTML = weeks.map(w => {
+        const wIncome = w.dates.reduce((s, d) => s + Number(days[d].parentIncome || 0), 0);
+        const wExpense = w.dates.reduce((s, d) => s + calcDayExpense(days[d]), 0);
+        const wLeft = Number(weeklyLimit || 0) - wExpense;
+
+        const daysHtml = w.dates.map(d => {
+          const item = days[d];
+          const exp = calcDayExpense(item);
+          const inc = Number(item.parentIncome || 0);
+          const isOpen = !!dayExpandedMap[d];
+
+          const fieldsHtml = Object.keys(FIELD_LABELS).map(key => `
+            <div class="field">
+              <label for="${d}__${key}">${FIELD_LABELS[key]}</label>
+              <input type="number" min="0" step="1000" id="${d}__${key}"
+                value="${Number(item[key] || 0)}" data-date="${d}" data-key="${key}" class="amt-input" />
+            </div>
+          `).join("");
+
+          return `
+            <div class="day-card ${isOpen ? "open" : ""}">
+              <div class="day-head" onclick="toggleDayCard('${d}')">
+                <div class="day-left">
+                  <strong>${formatDateLabel(d)}</strong>
+                  ${item.note ? `<span class="day-note-preview">• ${escapeHtml(item.note)}</span>` : ""}
+                </div>
+                <div class="day-right">
+                  ${inc > 0 ? `<span class="ok">+${fmtMoney(inc)}</span>` : ""}
+                  <span>Tổng chi: <strong>${fmtMoney(exp)}</strong></span>
+                  <span style="color:var(--muted);">${isOpen ? "▲" : "▼"}</span>
+                </div>
+              </div>
+              <div class="day-body">
+                <div class="inputs-grid">${fieldsHtml}</div>
+                <div class="note-field">
+                  <label for="${d}__note">Ghi chú ngày</label>
+                  <input type="text" id="${d}__note" value="${escapeHtml(item.note || "")}"
+                    placeholder="Ví dụ: Đóng tiền sân bóng, ăn sáng..." data-date="${d}" class="note-input" />
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <div class="week-section">
+            <div class="week-header">
+              <div>
+                <span class="week-title">${w.title}</span>
+                <span class="week-range">${w.range}</span>
+              </div>
+              <div class="week-summary">
+                <span>Thu: <strong class="ok">+${fmtMoney(wIncome)}</strong></span>
+                <span>Chi: <strong class="warn">${fmtMoney(wExpense)}</strong></span>
+                <span>Còn hạn mức tuần: <strong class="${wLeft < 0 ? "warn" : "ok"}">${fmtMoney(wLeft)}</strong> / ${fmtMoney(weeklyLimit)}</span>
+              </div>
+            </div>
+            ${daysHtml}
+          </div>
+        `;
+      }).join("");
+
+      bindDynamicEvents();
+    }
+
+    window.toggleDayCard = function(dateStr) {
+      appData.state.dayExpandedMap[dateStr] = !appData.state.dayExpandedMap[dateStr];
+      persist("Đã cập nhật");
+      render();
+    };
+
+    function bindDynamicEvents() {
+      document.querySelectorAll(".amt-input").forEach(el => {
+        el.addEventListener("change", e => {
+          const d = e.target.dataset.date;
+          const k = e.target.dataset.key;
+          const val = Math.max(0, Number(e.target.value || 0));
+          appData.state.days[d][k] = val;
+          persist("Đã lưu số tiền");
+          render();
+        });
+      });
+
+      document.querySelectorAll(".note-input").forEach(el => {
+        el.addEventListener("change", e => {
+          const d = e.target.dataset.date;
+          appData.state.days[d].note = e.target.value;
+          persist("Đã lưu ghi chú");
+          render();
+        });
+      });
+    }
+
+    document.getElementById("initialBalanceInput").addEventListener("change", e => {
+      appData.state.initialBalance = Math.max(0, Number(e.target.value || 0));
+      persist("Đã lưu số dư đầu");
+      render();
+    });
+
+    document.getElementById("weeklyLimitInput").addEventListener("change", e => {
+      appData.state.weeklyLimit = Math.max(0, Number(e.target.value || 0));
+      persist("Đã lưu hạn mức tuần");
+      render();
+    });
+
+    document.getElementById("exportJsonBtn").addEventListener("click", () => {
+      appData.exportedAt = new Date().toISOString();
+      persist("Đã lưu & xuất file");
+      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const dayStamp = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `so-chi-tieu-${dayStamp}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("importJsonInput").addEventListener("change", e => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          appData = normalizeData(parsed);
+          persist("Đã nhập file JSON");
+          render();
+          alert("Đã nhập dữ liệu từ file JSON thành công!");
+        } catch (err) {
+          alert("File JSON không hợp lệ: " + err.message);
+        }
+        e.target.value = "";
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if (confirm("Đặt lại toàn bộ dữ liệu về file gốc ban đầu?")) {
+        appData = normalizeData(DEFAULT_DATA);
+        persist("Đã reset về gốc");
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

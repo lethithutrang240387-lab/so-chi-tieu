@@ -1,0 +1,153 @@
+{
+  "app": "so_chi_tieu_23_11_2026",
+  "exportedAt": "2026-11-22T05:45:42.282Z",
+  "state": {
+    "visibleDays": 14,
+    "initialBalance": 300,
+    "weeklyLimit": 300000,
+    "days": {
+      "2026-11-23": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-24": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-25": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-26": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-27": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-28": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-29": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-11-30": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-12-01": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-12-02": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-12-03": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-12-04": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-12-05": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      },
+      "2026-12-06": {
+        "parentIncome": 0,
+        "breakfast": 0,
+        "afternoon": 0,
+        "drinks": 0,
+        "football": 0,
+        "travel": 0,
+        "extraCost": 0,
+        "note": ""
+      }
+    },
+    "dayExpandedMap": {},
+    "weekCollapsedMap": {}
+  }
+}
